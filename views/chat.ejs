@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		.caozuo{
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			height: 100px;
+			background-color: #ccc;
+			width: 100%;
+		}
+		.caozuo input{
+			font-size: 30px;
+		}
+		.caozuo input[type=text]{
+			width: 100%;
+		}
+	</style>
+</head>
+<script type="text/javascript" src="/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript">
+		var ws = new WebSocket('ws://127.0.0.1:3000');
+
+		 ws.onopen = function (e) {
+		 	//ws.send('asda');
+       			console.log('asda');
+    }
+    	//获取到服务端传过来的内容
+		ws.onmessage = function(e){
+			console.log(e.data);
+			$(".liebiao").prepend(e.data+"</br>");
+		}
+
+		$(function() {
+			function sendMessage(){
+				console.log('sendMessage')
+				var value = $("#neirong").val();
+				/*if(value) $(".liebiao").prepend("<li><%=yonghuming%>:"+value+"</li>");*/
+				var content = $('#neirong').val();
+				var name = "<%=yonghuming%>";
+				var str = "{name:'"+name+"',content:'"+content+"'}";
+				//发送到服务端
+				ws.send(str);
+				$('#neirong').val("");
+			}
+			//提交内容			
+			$('#submitBtn').click(function() {
+				// ws.send($('#neirong').val());
+
+				console.log('click btn');
+
+				sendMessage();
+			})
+		})
+	
+
+		
+			
+	</script>
+<body>
+	<h1>小小聊天室 欢迎：<span id="yonghu"><%=yonghuming%></span></h1>
+	<div>
+		<ul class="liebiao">
+			
+		</ul>
+	</div>
+
+	<div class="caozuo">
+		<input type="text" id="neirong" />
+		<button type="button"  id="submitBtn">提交</button>
+	</div>
+
+	
+</body>
+</html>
